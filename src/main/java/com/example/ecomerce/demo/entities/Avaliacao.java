@@ -16,7 +16,13 @@ public class Avaliacao {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer nota;
+    private Integer id;
+
+    @Min(1)
+    @Max(5)
+    @Column(nulllabe = false)
+    private integer nota; 
+
 
     @Size(max = 500)
     @Column(length = 500)
