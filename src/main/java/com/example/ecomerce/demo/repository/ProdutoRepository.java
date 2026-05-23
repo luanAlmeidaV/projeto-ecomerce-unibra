@@ -18,13 +18,8 @@ public interface ProdutoRepository extends CrudRepository<Produto, Long> {
 
     List<Produto> findByPrecoBetween(BigDecimal min, BigDecimal max);
 
-
     boolean existsByNomeIgnoreCase(String nome);
 
-    @Query("""
-        SELECT p FROM Produto p
-        WHERE p.preco <= :limite
-        ORDER BY p.preco DESC
-        """)
+    @Query("SELECT p FROM Produto p WHERE p.preco <= :limite ORDER BY p.preco DESC")
     List<Produto> abaixoDoLimite(@Param("limite") BigDecimal limite);
 }
