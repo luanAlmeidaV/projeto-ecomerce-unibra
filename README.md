@@ -2,122 +2,166 @@
 
 API REST desenvolvida em Java com Spring Boot para gerenciamento básico de um e-commerce.
 
-## Objetivo
+---
 
-Atender à entrega de Service + Validações + Tratamento de Erros, contendo:
+# Objetivo
 
-- Camada Service para cada entidade principal
-- Controllers chamando Services, não Repository diretamente
-- Uso de `@Transactional`
-- Bean Validation com `@Valid`
-- `ResourceNotFoundException`
-- `GlobalExceptionHandler`
-- CRUD completo com GET, POST, PUT e DELETE
+Atender à entrega de:
 
-## Tecnologias
+* Camada Service para cada entidade principal
+* Controllers utilizando Service ao invés de Repository
+* Uso de `@Transactional`
+* Validação com `@Valid`
+* `ResourceNotFoundException`
+* `GlobalExceptionHandler`
+* CRUD completo com GET, POST, PUT e DELETE
 
-- Java 11
-- Spring Boot 2.7.18
-- Spring Web
-- Spring Data JPA
-- H2 Database
-- Bean Validation
-- Lombok
-- Spring Security
-- Swagger / SpringDoc OpenAPI
+---
 
-## Entidades
+# Tecnologias Utilizadas
 
-- Categoria
-- Produto
-- Promoção
-- Avaliação
-- Usuário
+* Java 11
+* Spring Boot 2.7.18
+* Spring Web
+* Spring Data JPA
+* H2 Database
+* Bean Validation
+* Lombok
+* Spring Security
+* Swagger / SpringDoc OpenAPI
+* Maven
 
-## Relacionamentos
+---
 
-- `Produto` possui `@ManyToOne` com `Categoria`
-- `Categoria` possui `@OneToMany` com `Produto`
-- `Produto` possui `@OneToMany` com `Avaliacao`
-- `Produto` possui `@ManyToMany` com `Promocao`
+# Entidades
 
-## Como executar
+* Categoria
+* Produto
+* Promocao
+* Avaliacao
+* Usuario
+
+---
+
+# Relacionamentos
+
+* Produto possui `@ManyToOne` com Categoria
+* Categoria possui `@OneToMany` com Produto
+* Produto possui `@OneToMany` com Avaliacao
+* Produto possui `@ManyToMany` com Promocao
+
+---
+
+# Como Executar
+
+## Linux / Mac
 
 ```bash
 ./mvnw spring-boot:run
 ```
 
-No Windows:
+## Windows
 
 ```bash
 mvnw.cmd spring-boot:run
 ```
 
-## URLs úteis
+---
 
-- API: `http://localhost:8080`
-- Swagger: `http://localhost:8080/swagger-ui.html`
-- H2 Console: `http://localhost:8080/h2-console`
-- OpenAPI JSON: `http://localhost:8080/v3/api-docs`
+# URLs
 
-## Endpoints principais
+| Serviço      | URL                                         |
+| ------------ | ------------------------------------------- |
+| API          | http://localhost:8080                       |
+| Swagger      | http://localhost:8080/swagger-ui/index.html |
+| H2 Console   | http://localhost:8080/h2-console            |
+| OpenAPI JSON | http://localhost:8080/v3/api-docs           |
 
-### Produtos
+---
 
-| Método | Rota | Descrição |
-|---|---|---|
-| GET | `/api/v1/produtos` | Lista produtos |
-| GET | `/api/v1/produtos/{id}` | Busca produto por ID |
-| POST | `/api/v1/produtos` | Cria produto |
-| PUT | `/api/v1/produtos/{id}` | Atualiza produto |
-| DELETE | `/api/v1/produtos/{id}` | Remove produto |
+# Estrutura do Projeto
 
-### Categorias
+```text
+src/main/java/com/example/ecomerce/demo
+│
+├── controller
+├── service
+├── repository
+├── entities
+├── exception
+└── config
+```
 
-| Método | Rota | Descrição |
-|---|---|---|
-| GET | `/api/v1/categorias` | Lista categorias |
-| GET | `/api/v1/categorias/{id}` | Busca categoria por ID |
-| POST | `/api/v1/categorias` | Cria categoria |
-| PUT | `/api/v1/categorias/{id}` | Atualiza categoria |
-| DELETE | `/api/v1/categorias/{id}` | Remove categoria |
+---
 
-### Avaliações
+# Endpoints Principais
 
-| Método | Rota | Descrição |
-|---|---|---|
-| GET | `/api/v1/avaliacoes` | Lista avaliações |
-| GET | `/api/v1/avaliacoes/{id}` | Busca avaliação por ID |
-| GET | `/api/v1/avaliacoes/produto/{produtoId}` | Lista avaliações por produto |
-| POST | `/api/v1/avaliacoes` | Cria avaliação |
-| PUT | `/api/v1/avaliacoes/{id}` | Atualiza avaliação |
-| DELETE | `/api/v1/avaliacoes/{id}` | Remove avaliação |
+## Produtos
 
-### Promoções
+| Método | Rota                  | Descrição            |
+| ------ | --------------------- | -------------------- |
+| GET    | /api/v1/produtos      | Lista produtos       |
+| GET    | /api/v1/produtos/{id} | Busca produto por ID |
+| POST   | /api/v1/produtos      | Cria produto         |
+| PUT    | /api/v1/produtos/{id} | Atualiza produto     |
+| DELETE | /api/v1/produtos/{id} | Remove produto       |
 
-| Método | Rota | Descrição |
-|---|---|---|
-| GET | `/api/v1/promocoes` | Lista promoções |
-| GET | `/api/v1/promocoes/{id}` | Busca promoção por ID |
-| GET | `/api/v1/promocoes/vigentes` | Lista promoções vigentes |
-| POST | `/api/v1/promocoes` | Cria promoção |
-| PUT | `/api/v1/promocoes/{id}` | Atualiza promoção |
-| DELETE | `/api/v1/promocoes/{id}` | Remove promoção |
+---
 
-### Usuários
+## Categorias
 
-| Método | Rota | Descrição |
-|---|---|---|
-| GET | `/api/v1/usuarios` | Lista usuários |
-| GET | `/api/v1/usuarios/{id}` | Busca usuário por ID |
-| GET | `/api/v1/usuarios/busca?nome=gui` | Busca usuário por nome |
-| POST | `/api/v1/usuarios` | Cria usuário |
-| PUT | `/api/v1/usuarios/{id}` | Atualiza usuário |
-| DELETE | `/api/v1/usuarios/{id}` | Remove usuário |
+| Método | Rota                    | Descrição              |
+| ------ | ----------------------- | ---------------------- |
+| GET    | /api/v1/categorias      | Lista categorias       |
+| GET    | /api/v1/categorias/{id} | Busca categoria por ID |
+| POST   | /api/v1/categorias      | Cria categoria         |
+| PUT    | /api/v1/categorias/{id} | Atualiza categoria     |
+| DELETE | /api/v1/categorias/{id} | Remove categoria       |
 
-## Exemplos de teste no Swagger
+---
 
-### Criar categoria
+## Avaliações
+
+| Método | Rota                                   | Descrição                   |
+| ------ | -------------------------------------- | --------------------------- |
+| GET    | /api/v1/avaliacoes                     | Lista avaliações            |
+| GET    | /api/v1/avaliacoes/{id}                | Busca avaliação por ID      |
+| GET    | /api/v1/avaliacoes/produto/{produtoId} | Lista avaliações do produto |
+| POST   | /api/v1/avaliacoes                     | Cria avaliação              |
+| PUT    | /api/v1/avaliacoes/{id}                | Atualiza avaliação          |
+| DELETE | /api/v1/avaliacoes/{id}                | Remove avaliação            |
+
+---
+
+## Promoções
+
+| Método | Rota                       | Descrição                |
+| ------ | -------------------------- | ------------------------ |
+| GET    | /api/v1/promocoes          | Lista promoções          |
+| GET    | /api/v1/promocoes/{id}     | Busca promoção por ID    |
+| GET    | /api/v1/promocoes/vigentes | Lista promoções vigentes |
+| POST   | /api/v1/promocoes          | Cria promoção            |
+| PUT    | /api/v1/promocoes/{id}     | Atualiza promoção        |
+| DELETE | /api/v1/promocoes/{id}     | Remove promoção          |
+
+---
+
+## Usuários
+
+| Método | Rota                            | Descrição              |
+| ------ | ------------------------------- | ---------------------- |
+| GET    | /api/v1/usuarios                | Lista usuários         |
+| GET    | /api/v1/usuarios/{id}           | Busca usuário por ID   |
+| GET    | /api/v1/usuarios/busca?nome=gui | Busca usuário por nome |
+| POST   | /api/v1/usuarios                | Cria usuário           |
+| PUT    | /api/v1/usuarios/{id}           | Atualiza usuário       |
+| DELETE | /api/v1/usuarios/{id}           | Remove usuário         |
+
+---
+
+# Exemplos de Teste no Swagger
+
+## Criar Categoria
 
 ```json
 {
@@ -126,7 +170,9 @@ mvnw.cmd spring-boot:run
 }
 ```
 
-### Criar produto
+---
+
+## Criar Produto
 
 ```json
 {
@@ -140,7 +186,9 @@ mvnw.cmd spring-boot:run
 }
 ```
 
-### Criar avaliação
+---
+
+## Criar Avaliação
 
 ```json
 {
@@ -153,11 +201,13 @@ mvnw.cmd spring-boot:run
 }
 ```
 
-## Validações e erros
+---
 
-A API retorna erro 400 quando algum campo obrigatório está inválido.
+# Validações e Tratamento de Erros
 
-Exemplo:
+A API retorna erro `400 Bad Request` quando algum campo obrigatório está inválido.
+
+## Exemplo de erro 400
 
 ```json
 {
@@ -167,9 +217,9 @@ Exemplo:
 }
 ```
 
-A API retorna erro 404 quando o recurso não é encontrado.
+A API retorna erro `404 Not Found` quando o recurso não é encontrado.
 
-Exemplo:
+## Exemplo de erro 404
 
 ```json
 {
@@ -178,3 +228,23 @@ Exemplo:
   "timestamp": "2026-05-23T10:00:00"
 }
 ```
+
+---
+
+# Funcionalidades Implementadas
+
+* CRUD completo
+* Documentação Swagger/OpenAPI
+* Persistência com JPA/Hibernate
+* Banco H2 em memória
+* Relacionamentos entre entidades
+* Camada Service
+* Tratamento global de erros
+* Validações com Bean Validation
+* Arquitetura REST
+
+---
+
+# Autor
+
+Projeto acadêmico desenvolvido para a disciplina de Desenvolvimento Web / API REST - UNIBRA.
