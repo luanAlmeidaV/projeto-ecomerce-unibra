@@ -3,7 +3,7 @@ package com.example.ecomerce.demo.service;
 import com.example.ecomerce.demo.entities.Produto;
 import com.example.ecomerce.demo.exception.ResourceNotFoundException;
 import com.example.ecomerce.demo.repository.ProdutoRepository;
-import jakarta.validation.ValidationException;
+import javax.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

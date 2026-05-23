@@ -2,7 +2,7 @@ package com.example.ecomerce.demo.controller;
 
 import com.example.ecomerce.demo.entities.Avaliacao;
 import com.example.ecomerce.demo.service.AvaliacaoService;
-import jakarta.validation.Valid;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

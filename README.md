@@ -16,8 +16,8 @@ Atender à entrega de Service + Validações + Tratamento de Erros, contendo:
 
 ## Tecnologias
 
-- Java 17
-- Spring Boot 3.3.5
+- Java 11
+- Spring Boot 2.7.18
 - Spring Web
 - Spring Data JPA
 - H2 Database
