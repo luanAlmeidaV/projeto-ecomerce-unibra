@@ -1,11 +1,9 @@
 package com.example.ecomerce.demo.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -20,22 +18,22 @@ import java.util.Set;
 @Entity
 @Table(name = "produtos")
 @Getter @Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor @AllArgsConstructor
 @ToString(exclude = {"avaliacoes", "promocoes"})
-@EqualsAndHashCode(of = "id") // foca só no id
+@EqualsAndHashCode(of = "id")
 public class Produto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
-    @Size(max = 150)
-    @Column(nullable = false, length = 150)
+    @NotBlank(message = "O nome do produto é obrigatório")
+    @Size(max = 150, message = "O nome deve ter no máximo 150 caracteres")
+    @Column(nullable = false, length = 150, unique = true)
     private String nome;
 
-    @DecimalMin("0.01")
+    @NotNull(message = "O preço é obrigatório")
+    @DecimalMin(value = "0.01", message = "O preço deve ser maior que zero")
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal preco;
 
@@ -44,11 +42,12 @@ public class Produto {
 
     @ManyToOne
     @JoinColumn(name = "categoria_id")
+    @JsonIgnoreProperties("produtos")
     private Categoria categoria;
 
-    @NotNull(message = "Deve haver produto em estoque")
+    @Min(value = 0, message = "O estoque não pode ser negativo")
     @Column(nullable = false)
-    private int estoque;
+    private Integer estoque;
 
     @JsonIgnore
     @OneToMany(mappedBy = "produto", cascade = CascadeType.ALL)
@@ -58,9 +57,8 @@ public class Produto {
     @ManyToMany
     @JoinTable(name = "produto_promocao",
             joinColumns = @JoinColumn(name = "produto_id"),
-            inverseJoinColumns = @JoinColumn(name = "promocao_id")
-    )
-    private Set<Promocao> promocoes = new HashSet<>(); // 2. CORRIGIDO: "Set" com S maiúsculo
+            inverseJoinColumns = @JoinColumn(name = "promocao_id"))
+    private Set<Promocao> promocoes = new HashSet<>();
 
     @CreationTimestamp
     @Column(updatable = false)

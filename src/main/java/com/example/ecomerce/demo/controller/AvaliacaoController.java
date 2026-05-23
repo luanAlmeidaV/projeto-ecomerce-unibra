@@ -1,7 +1,8 @@
 package com.example.ecomerce.demo.controller;
 
 import com.example.ecomerce.demo.entities.Avaliacao;
-import com.example.ecomerce.demo.repository.AvaliacaoRepository;
+import com.example.ecomerce.demo.service.AvaliacaoService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,25 +14,36 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AvaliacaoController {
 
-    private final AvaliacaoRepository repository;
+    private final AvaliacaoService service;
 
-    // GET /api/v1/avaliacoes
     @GetMapping
     public ResponseEntity<Iterable<Avaliacao>> listar() {
-        return ResponseEntity.ok(repository.findAll());
+        return ResponseEntity.ok(service.listarTodos());
     }
 
-    // GET /api/v1/avaliacoes/{id}
     @GetMapping("/{id}")
-    public ResponseEntity<Avaliacao> buscar(@PathVariable long id) {
-        return repository.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<Avaliacao> buscar(@PathVariable Long id) {
+        return ResponseEntity.ok(service.buscarPorId(id));
     }
 
-    // GET /api/v1/avaliacoes/produto/5 — todas as avaliações do produto com id=5
     @GetMapping("/produto/{produtoId}")
     public ResponseEntity<List<Avaliacao>> porProduto(@PathVariable Long produtoId) {
-        return ResponseEntity.ok(repository.findByProdutoId(produtoId));
+        return ResponseEntity.ok(service.buscarPorProduto(produtoId));
+    }
+
+    @PostMapping
+    public ResponseEntity<Avaliacao> criar(@Valid @RequestBody Avaliacao avaliacao) {
+        return ResponseEntity.status(201).body(service.salvar(avaliacao));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Avaliacao> atualizar(@PathVariable Long id, @Valid @RequestBody Avaliacao avaliacao) {
+        return ResponseEntity.ok(service.atualizar(id, avaliacao));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletar(@PathVariable Long id) {
+        service.deletar(id);
+        return ResponseEntity.noContent().build();
     }
 }

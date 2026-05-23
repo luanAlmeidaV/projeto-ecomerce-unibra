@@ -1,6 +1,5 @@
 package com.example.ecomerce.demo.entities;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
@@ -21,11 +20,11 @@ public class Categoria {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
-    @NotBlank
-    @Size(max = 100)
-    @Column(nullable = false, length = 100)
+    @NotBlank(message = "O nome da categoria é obrigatório")
+    @Size(max = 100, message = "O nome deve ter no máximo 100 caracteres")
+    @Column(nullable = false, length = 100, unique = true)
     private String nome;
 
     @Column(columnDefinition = "TEXT")
@@ -38,5 +37,4 @@ public class Categoria {
     @JsonIgnore
     @OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL)
     private List<Produto> produtos = new ArrayList<>();
-
 }

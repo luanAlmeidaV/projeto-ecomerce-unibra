@@ -1,44 +1,60 @@
 package com.example.ecomerce.demo.controller;
 
-
 import com.example.ecomerce.demo.entities.Produto;
-import com.example.ecomerce.demo.repository.ProdutoRepository;
+import com.example.ecomerce.demo.service.ProdutoService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/produtos")
 @RequiredArgsConstructor
-public class ProdutoController{
+public class ProdutoController {
 
-    private final ProdutoRepository repository;
+    private final ProdutoService service;
 
-    // GET /api/v1/produtos
     @GetMapping
     public ResponseEntity<Iterable<Produto>> listar() {
-        return ResponseEntity.ok(repository.findAll());
+        return ResponseEntity.ok(service.listarTodos());
     }
 
-    // GET /api/v1/produtos/{id}
     @GetMapping("/{id}")
-    public ResponseEntity<Produto> buscar(@PathVariable long id) {
-        return repository.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<Produto> buscar(@PathVariable Long id) {
+        return ResponseEntity.ok(service.buscarPorId(id));
     }
 
-    // GET /api/v1/produtos/busca?nome=tenis — busca case-insensitive por trecho do nome
     @GetMapping("/busca")
     public ResponseEntity<List<Produto>> buscarPorNome(@RequestParam String nome) {
-        return ResponseEntity.ok(repository.findByNomeContainingIgnoreCase(nome));
+        return ResponseEntity.ok(service.buscarPorNome(nome));
     }
 
-    // GET /api/v1/produtos/categoria/3 — todos os produtos de uma categoria
     @GetMapping("/categoria/{categoriaId}")
     public ResponseEntity<List<Produto>> porCategoria(@PathVariable Long categoriaId) {
-        return ResponseEntity.ok(repository.findByCategoriaId(categoriaId));
+        return ResponseEntity.ok(service.buscarPorCategoria(categoriaId));
+    }
+
+    @GetMapping("/preco")
+    public ResponseEntity<List<Produto>> porPreco(@RequestParam BigDecimal min, @RequestParam BigDecimal max) {
+        return ResponseEntity.ok(service.buscarPorPreco(min, max));
+    }
+
+    @PostMapping
+    public ResponseEntity<Produto> criar(@Valid @RequestBody Produto produto) {
+        return ResponseEntity.status(201).body(service.salvar(produto));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Produto> atualizar(@PathVariable Long id, @Valid @RequestBody Produto produto) {
+        return ResponseEntity.ok(service.atualizar(id, produto));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletar(@PathVariable Long id) {
+        service.deletar(id);
+        return ResponseEntity.noContent().build();
     }
 }

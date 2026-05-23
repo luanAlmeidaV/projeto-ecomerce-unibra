@@ -1,12 +1,12 @@
 package com.example.ecomerce.demo.controller;
 
 import com.example.ecomerce.demo.entities.Promocao;
-import com.example.ecomerce.demo.repository.PromocaoRepository;
+import com.example.ecomerce.demo.service.PromocaoService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -14,25 +14,36 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PromocaoController {
 
-    private final PromocaoRepository repository;
+    private final PromocaoService service;
 
     @GetMapping
     public ResponseEntity<Iterable<Promocao>> listar() {
-        return ResponseEntity.ok(repository.findAll());
+        return ResponseEntity.ok(service.listarTodos());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Promocao> buscar(@PathVariable long id) {
-        return repository.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<Promocao> buscar(@PathVariable Long id) {
+        return ResponseEntity.ok(service.buscarPorId(id));
     }
 
     @GetMapping("/vigentes")
     public ResponseEntity<List<Promocao>> vigentes() {
-        LocalDate hoje = LocalDate.now();
-        return ResponseEntity.ok(
-                repository.findByDataInicioLessThanEqualAndDataFimGreaterThanEqual(hoje, hoje)
-        );
+        return ResponseEntity.ok(service.listarVigentes());
+    }
+
+    @PostMapping
+    public ResponseEntity<Promocao> criar(@Valid @RequestBody Promocao promocao) {
+        return ResponseEntity.status(201).body(service.salvar(promocao));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Promocao> atualizar(@PathVariable Long id, @Valid @RequestBody Promocao promocao) {
+        return ResponseEntity.ok(service.atualizar(id, promocao));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletar(@PathVariable Long id) {
+        service.deletar(id);
+        return ResponseEntity.noContent().build();
     }
 }

@@ -1,34 +1,42 @@
 package com.example.ecomerce.demo.controller;
 
-
 import com.example.ecomerce.demo.entities.Categoria;
-import com.example.ecomerce.demo.repository.CategoriaRepository;
+import com.example.ecomerce.demo.service.CategoriaService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/categorias")
 @RequiredArgsConstructor
 public class CategoriaController {
 
-    private final CategoriaRepository repository;
+    private final CategoriaService service;
 
-    // GET /api/v1/categorias — HTTP 200 com lista completa
     @GetMapping
     public ResponseEntity<Iterable<Categoria>> listar() {
-        return ResponseEntity.ok(repository.findAll());
+        return ResponseEntity.ok(service.listarTodos());
     }
 
-    // GET /api/v1/categorias/{id} — HTTP 200 se encontrado, 404 caso contrário
     @GetMapping("/{id}")
-    public ResponseEntity<Categoria> buscar(@PathVariable long id) {
-        return repository.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<Categoria> buscar(@PathVariable Long id) {
+        return ResponseEntity.ok(service.buscarPorId(id));
+    }
+
+    @PostMapping
+    public ResponseEntity<Categoria> criar(@Valid @RequestBody Categoria categoria) {
+        return ResponseEntity.status(201).body(service.salvar(categoria));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Categoria> atualizar(@PathVariable Long id, @Valid @RequestBody Categoria categoria) {
+        return ResponseEntity.ok(service.atualizar(id, categoria));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletar(@PathVariable Long id) {
+        service.deletar(id);
+        return ResponseEntity.noContent().build();
     }
 }
-
