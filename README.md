@@ -247,4 +247,4 @@ A API retorna erro `404 Not Found` quando o recurso não é encontrado.
 
 # Autor
 
-Projeto acadêmico desenvolvido para a disciplina de Desenvolvimento Web / API REST - UNIBRA.
+Projeto acadêmico desenvolvido para a disciplina de PCS / API REST - UNIBRA.
